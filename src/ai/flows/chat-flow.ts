@@ -27,7 +27,6 @@ const chatFlow = ai.defineFlow(
     }));
 
     const llmResponse = await ai.generate({
-      model: 'googleai/gemini-pro',
       history: history,
       prompt: input.message,
       config: {
