@@ -1,13 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartConfig, ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
-import { getMonthlyWasteDiverted } from '@/lib/data';
-import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowUpCircle } from 'lucide-react';
-
 
 const chartConfig = {
   profit: {
@@ -20,47 +16,16 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const chartData = [
+  { month: 'Jan', profit: 25000, pollutionSaved: 40 },
+  { month: 'Feb', profit: 32000, pollutionSaved: 55 },
+  { month: 'Mar', profit: 41000, pollutionSaved: 70 },
+  { month: 'Apr', profit: 38000, pollutionSaved: 65 },
+  { month: 'May', profit: 52000, pollutionSaved: 85 },
+  { month: 'Jun', profit: 65000, pollutionSaved: 100 },
+];
 
 export function SolutionChart() {
-  const [chartData, setChartData] = useState<{ month: string; profit: number; pollutionSaved: number }[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      const data = await getMonthlyWasteDiverted();
-      // Assuming each diverted stream saves ~15 index points of pollution for visualization
-      const solutionData = data.map(item => ({
-        ...item,
-        pollutionSaved: item.diverted * 15,
-      }));
-      setChartData(solutionData);
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return (
-        <Card className="border-primary/30 bg-primary/5">
-            <CardHeader>
-                <Skeleton className="h-6 w-2/3" />
-                <Skeleton className="h-4 w-full mt-2" />
-            </CardHeader>
-            <CardContent>
-                <div className="h-[250px] w-full flex items-end px-4 gap-4">
-                    <Skeleton className="h-[60%] w-1/6" />
-                    <Skeleton className="h-[40%] w-1/6" />
-                    <Skeleton className="h-[70%] w-1/6" />
-                    <Skeleton className="h-[80%] w-1/6" />
-                    <Skeleton className="h-[55%] w-1/6" />
-                    <Skeleton className="h-[90%] w-1/6" />
-                </div>
-            </CardContent>
-        </Card>
-    )
-  }
-  
   return (
     <Card className="border-primary/30 bg-primary/5">
       <CardHeader>
