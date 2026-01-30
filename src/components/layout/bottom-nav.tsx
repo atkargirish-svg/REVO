@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
-import { Home, ShoppingCart, UserCircle, LayoutDashboard } from 'lucide-react';
+import { Home, ShoppingCart, UserCircle, LayoutDashboard, Building } from 'lucide-react';
 import { useTranslation } from '@/hooks/use-translation';
 
 export default function BottomNav() {
@@ -15,12 +15,14 @@ export default function BottomNav() {
   const loggedOutRoutes = [
     { href: '/', label: t('home'), icon: Home, active: pathname === '/' },
     { href: '/products', label: t('market'), icon: ShoppingCart, active: pathname.startsWith('/products') },
+    { href: '/top-sellers', label: t('producers'), icon: Building, active: pathname.startsWith('/top-sellers') },
     { href: '/login', label: t('login'), icon: UserCircle, active: pathname === '/login' },
   ];
 
   const loggedInRoutes = [
     { href: '/', label: t('home'), icon: Home, active: pathname === '/' },
     { href: '/products', label: t('market'), icon: ShoppingCart, active: pathname.startsWith('/products') },
+    { href: '/top-sellers', label: t('producers'), icon: Building, active: pathname.startsWith('/top-sellers') },
     { href: '/dashboard', label: t('dashboard'), icon: LayoutDashboard, active: pathname.startsWith('/dashboard') },
     { href: '/profile', label: t('profile'), icon: UserCircle, active: pathname === '/profile' },
   ];
@@ -36,7 +38,7 @@ export default function BottomNav() {
   }
 
   return (
-    <div className="fixed bottom-4 inset-x-4 mx-auto w-auto max-w-sm h-16 bg-card/80 backdrop-blur-xl z-50 rounded-full border border-accent/30 shadow-[0_0_12px_hsl(var(--accent)/0.5)]">
+    <div className="fixed bottom-4 inset-x-4 mx-auto w-auto max-w-md h-16 bg-card/80 backdrop-blur-xl z-50 rounded-full border border-accent/30 shadow-[0_0_12px_hsl(var(--accent)/0.5)]">
       <nav className="h-full">
         <ul className="h-full flex items-center justify-around px-2">
           {routes.map((route) => (

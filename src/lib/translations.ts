@@ -8,6 +8,7 @@ export const translations = {
   'profile': { en: 'Profile', hi: 'प्रोफ़ाइल' },
   'logout': { en: 'Logout', hi: 'लॉग आउट' },
   'signup': { en: 'Sign up', hi: 'साइन अप' },
+  'producers': { en: 'Producers', hi: 'निर्माता' },
 
   // Header
   'loginRegister': { en: 'Login / Register', hi: 'लॉगिन / रजिस्टर' },
