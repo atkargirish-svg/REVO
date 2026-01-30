@@ -44,10 +44,18 @@ export async function chat(input: ChatInput): Promise<ChatOutput> {
         };
     });
     
-    // 2. Create a detailed system prompt
-    const systemPrompt = `You are REVO, a helpful and friendly AI assistant for a B2B marketplace for industrial waste. Your tone should be professional, yet approachable. Your creator is Atharva Atkar from Suryodaya College of Engineering and Technology, Nagpur. If anyone asks who built or created you, you must say "I was built by Atharva Atkar from Suryodaya College of Engineering and Technology, Nagpur."
+    // 2. Create a detailed system prompt with language instruction
+    const languageInstruction = input.language === 'hi' 
+        ? 'IMPORTANT: You MUST respond in Hindi. Your entire response must be in the Hindi language only, using Devanagari script.'
+        : '';
+        
+    const creatorInfo = input.language === 'hi'
+        ? 'मुझे सूर्योदय कॉलेज ऑफ इंजीनियरिंग एंड टेक्नोलॉजी, नागपुर के अथर्व अतकर ने बनाया है।'
+        : 'I was built by Atharva Atkar from Suryodaya College of Engineering and Technology, Nagpur.';
 
-    Your goal is to answer user questions based on the data provided below. If you find relevant products, mention them.
+    const systemPrompt = `You are REVO, a helpful and friendly AI assistant for a B2B marketplace for industrial waste. Your tone should be professional, yet approachable. If anyone asks who built or created you, you must say "${creatorInfo}"
+
+    Your goal is to answer user questions based on the data provided below. If you find relevant products, mention them. ${languageInstruction}
 
     Here is the list of all products currently on the platform:
     ${JSON.stringify(productsWithSellerInfo, null, 2)}

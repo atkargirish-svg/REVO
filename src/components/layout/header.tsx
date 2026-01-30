@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Leaf } from 'lucide-react';
 import UserNav from './user-nav';
+import LanguageSwitcher from './language-switcher';
 
 export default function Header() {
   return (
@@ -12,7 +13,8 @@ export default function Header() {
             REVO
           </span>
         </Link>
-        <div className="flex flex-1 items-center justify-end space-x-4">
+        <div className="flex flex-1 items-center justify-end space-x-2">
+          <LanguageSwitcher />
           <UserNav />
         </div>
       </div>

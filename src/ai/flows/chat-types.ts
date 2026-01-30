@@ -9,6 +9,7 @@ const ChatMessageSchema = z.object({
 export const ChatInputSchema = z.object({
   history: z.array(ChatMessageSchema),
   message: z.string(),
+  language: z.enum(['en', 'hi']).optional().default('en'),
 });
 export type ChatInput = z.infer<typeof ChatInputSchema>;
 

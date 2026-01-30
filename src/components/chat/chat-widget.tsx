@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import ChatProductCard from './chat-product-card';
+import { useLanguage } from '@/context/language-context';
 
 type Message = {
   role: 'user' | 'model';
@@ -28,6 +29,18 @@ export default function ChatWidget() {
   const [isTtsEnabled, setIsTtsEnabled] = useState(true);
   const [isPending, startTransition] = useTransition();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const { language } = useLanguage();
+
+  const t = (key: 'GREETING' | 'AI_ASSISTANT' | 'ASSISTANT_DESCRIPTION' | 'THINKING' | 'PLACEHOLDER') => {
+      const translations = {
+          GREETING: { en: "Hi! I'm REVO, your friendly marketplace assistant. How can I help you today?", hi: "नमस्ते! मैं रेवो हूँ, आपका मार्केटप्लेस सहायक। मैं आज आपकी क्या मदद कर सकता हूँ?" },
+          AI_ASSISTANT: { en: 'AI Assistant', hi: 'एआई सहायक' },
+          ASSISTANT_DESCRIPTION: { en: 'Your guide to the REVO marketplace.', hi: 'रेवो मार्केटप्लेस के लिए आपका गाइड।' },
+          THINKING: { en: 'Thinking...', hi: 'सोच रहा हूँ...'},
+          PLACEHOLDER: { en: 'Ask me anything...', hi: 'कुछ भी पूछें...'}
+      }
+      return translations[key][language];
+  }
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -44,10 +57,11 @@ export default function ChatWidget() {
         if (lastMessage.role === 'model') {
             window.speechSynthesis.cancel(); // Stop any previous speech
             const utterance = new SpeechSynthesisUtterance(lastMessage.content);
+            utterance.lang = language === 'hi' ? 'hi-IN' : 'en-US'; // Set voice language
             window.speechSynthesis.speak(utterance);
         }
     }
-  }, [messages, isTtsEnabled]);
+  }, [messages, isTtsEnabled, language]);
   
   useEffect(() => {
       if (!isOpen) {
@@ -70,6 +84,7 @@ export default function ChatWidget() {
         const chatInput: ChatInput = {
           history: messages.map(m => ({role: m.role, content: m.content})),
           message: currentInput,
+          language: language,
         };
         const result: ChatOutput = await chat(chatInput);
         const modelMessage: Message = { 
@@ -100,9 +115,9 @@ export default function ChatWidget() {
         <SheetHeader className="p-6 pb-4">
           <div className="flex justify-between items-center">
             <div>
-                <SheetTitle>AI Assistant</SheetTitle>
+                <SheetTitle>{t('AI_ASSISTANT')}</SheetTitle>
                 <SheetDescription>
-                    Your guide to the REVO marketplace.
+                    {t('ASSISTANT_DESCRIPTION')}
                 </SheetDescription>
             </div>
             <TooltipProvider>
@@ -127,7 +142,7 @@ export default function ChatWidget() {
                     <AvatarFallback><Bot /></AvatarFallback>
                 </Avatar>
                 <div className="max-w-[75%] p-3 rounded-lg bg-muted">
-                    <p>Hi! I'm REVO, your friendly marketplace assistant. How can I help you today?</p>
+                    <p>{t('GREETING')}</p>
                 </div>
             </div>
             {messages.map((message, index) => (
@@ -172,7 +187,7 @@ export default function ChatWidget() {
                     </Avatar>
                     <div className="max-w-[75%] p-3 rounded-lg bg-muted flex items-center gap-2">
                         <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>Thinking...</span>
+                      <span>{t('THINKING')}</span>
                     </div>
                 </div>
             )}
@@ -183,7 +198,7 @@ export default function ChatWidget() {
             <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask me anything..."
+                placeholder={t('PLACEHOLDER')}
                 className="flex-1"
                 disabled={isPending}
             />
