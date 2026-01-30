@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
-import { Home, ShoppingCart, PlusCircle, UserCircle, LayoutDashboard } from 'lucide-react';
+import { Home, ShoppingCart, MessageCircle, UserCircle, LayoutDashboard } from 'lucide-react';
 
 export default function BottomNav() {
   const pathname = usePathname();
@@ -14,14 +14,15 @@ export default function BottomNav() {
   const loggedOutRoutes = [
     { href: '/', label: 'Home', icon: Home, active: pathname === '/' },
     { href: '/products', label: 'Market', icon: ShoppingCart, active: pathname.startsWith('/products') },
+    { href: '/chat', label: 'Chat', icon: MessageCircle, active: pathname.startsWith('/chat') },
     { href: '/login', label: 'Login', icon: UserCircle, active: pathname === '/login' },
   ];
 
   const loggedInRoutes = [
     { href: '/', label: 'Home', icon: Home, active: pathname === '/' },
     { href: '/products', label: 'Market', icon: ShoppingCart, active: pathname.startsWith('/products') },
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, active: pathname.startsWith('/dashboard') && !pathname.includes('add-product') },
-    { href: '/dashboard/add-product', label: 'Add', icon: PlusCircle, active: pathname === '/dashboard/add-product' },
+    { href: '/chat', label: 'Chat', icon: MessageCircle, active: pathname.startsWith('/chat') },
+    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, active: pathname.startsWith('/dashboard') },
     { href: '/profile', label: 'Profile', icon: UserCircle, active: pathname === '/profile' },
   ].slice(0, 5);
 

@@ -14,3 +14,4 @@ config();
 import '@/ai/flows/appraise-waste-flow.ts';
 import '@/ai/flows/smart-category-suggestion.ts';
 import '@/ai/flows/suggest-description-flow.ts';
+import '@/ai/flows/chat-flow.ts';
