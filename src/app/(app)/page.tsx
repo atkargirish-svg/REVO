@@ -105,7 +105,7 @@ export default function HomePage() {
         </div>
         <div className="relative container px-4">
             <div className="mx-auto max-w-4xl flex flex-col items-center gap-6 animate-fade-in-up">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight font-headline bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-primary">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight font-headline bg-clip-text text-transparent bg-gradient-to-br from-primary via-chart-4 to-primary">
                     {t('home.hero.title')}
                 </h1>
                 <p className="max-w-2xl text-lg text-neutral-200 sm:text-xl">
