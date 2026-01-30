@@ -8,8 +8,8 @@
  * - SuggestDescriptionOutput - The return type for the suggestDescription function.
  */
 
-import {z} from 'zod';
-import Groq from 'groq-sdk';
+import { ai } from '@/ai/genkit';
+import { z } from 'zod';
 
 const SuggestDescriptionInputSchema = z.object({
   photoDataUri: z
@@ -26,19 +26,19 @@ const SuggestDescriptionOutputSchema = z.object({
 });
 export type SuggestDescriptionOutput = z.infer<typeof SuggestDescriptionOutputSchema>;
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY
-});
 
 export async function suggestDescription(input: SuggestDescriptionInput): Promise<SuggestDescriptionOutput> {
-    if (!process.env.GROQ_API_KEY) {
-      throw new Error('GROQ_API_KEY is not set in the environment.');
-    }
+  return suggestDescriptionFlow(input);
+}
 
-    try {
-        const prompt = `You are a factory operations manager listing industrial waste on a B2B exchange platform. Your goal is to write an accurate, professional description for a potential buyer (e.g., a recycling plant).
+const prompt = ai.definePrompt({
+    name: 'suggestDescriptionPrompt',
+    input: {schema: SuggestDescriptionInputSchema},
+    output: {schema: SuggestDescriptionOutputSchema},
+    prompt: `You are a factory operations manager listing industrial waste on a B2B exchange platform. Your goal is to write an accurate, professional description for a potential buyer (e.g., a recycling plant).
 
-Analyze the provided image of a waste material from the '${input.category}' industry sector.
+Analyze the provided image of a waste material from the '{{{category}}}' industry sector.
+{{media url=photoDataUri}}
 
 Based on what you see in the image, write a short, technical description (1-2 sentences) of the material's composition and condition.
 - Be specific and professional. For example, instead of "looks clean," say "Material appears free of contaminants and is uniformly processed."
@@ -46,41 +46,25 @@ Based on what you see in the image, write a short, technical description (1-2 se
 - Highlight key characteristics (e.g., "Consistent shred size," "Low moisture content").
 - Do NOT invent chemical properties you cannot see. Stick to the visual information and common knowledge for the material type.
 
-VERY IMPORTANT: Only return the description text. Do not add any introductory text like "Here is the description:" or any markdown formatting. Just the plain text description.`;
-        
-        const messages = [
-            {
-                role: 'user' as const,
-                content: [
-                    {
-                        type: 'text' as const,
-                        text: prompt,
-                    },
-                    {
-                        type: 'image_url' as const,
-                        image_url: {
-                            url: input.photoDataUri,
-                        }
-                    }
-                ]
-            }
-        ];
+VERY IMPORTANT: Only return the description text. Do not add any introductory text like "Here is the description:" or any markdown formatting. Just the plain text description. In the JSON output, the key should be 'suggestedDescription'.`
+});
 
-        const llmResponse = await groq.chat.completions.create({
-            messages: messages,
-            model: 'llama-3.1-8b-instant',
-            temperature: 0.2, // Lower temperature for more factual description
-        });
-
-        const text = llmResponse.choices[0]?.message?.content || 'Could not generate a description at this time.';
-
-        return {
-            suggestedDescription: text.trim(),
-        };
-
-    } catch (e: any) {
-        console.error("Error with Groq API for description suggestion:", e);
-        // Fallback or rethrow
-        throw new Error(`Groq API failed for description suggestion: ${e.message || 'An unknown error occurred.'}`);
+const suggestDescriptionFlow = ai.defineFlow(
+  {
+    name: 'suggestDescriptionFlow',
+    inputSchema: SuggestDescriptionInputSchema,
+    outputSchema: SuggestDescriptionOutputSchema,
+  },
+  async input => {
+    try {
+        const {output} = await prompt(input);
+        if (!output) {
+            return { suggestedDescription: 'Could not generate a description. Please write one manually.' };
+        }
+        return output;
+    } catch (error) {
+        console.error("Error with Genkit description suggestion:", error);
+        throw new Error(`AI description suggestion failed: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
     }
-}
+  }
+);
