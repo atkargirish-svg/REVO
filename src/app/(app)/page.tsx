@@ -6,7 +6,8 @@ import { PageTransitionWrapper } from '@/components/page-transition-wrapper';
 import FeaturedProducts from '@/components/products/featured-products';
 import { Factory, Recycle, Leaf, Truck } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { WasteDivertedChart } from '@/components/dashboard/waste-diverted-chart';
+import { ProblemChart } from '@/components/analytics/problem-chart';
+import { SolutionChart } from '@/components/analytics/solution-chart';
 import Image from 'next/image';
 import { ScrollAnimation } from '@/components/scroll-animation';
 import { useTranslation } from '@/hooks/use-translation';
@@ -158,10 +159,27 @@ export default function HomePage() {
                 </div>
             </div>
 
-            {/* Monthly Chart */}
-            <ScrollAnimation animation="fade-in-left">
-              <WasteDivertedChart />
-            </ScrollAnimation>
+            {/* REVO Impact Comparison */}
+            <section id="revo-impact">
+                <ScrollAnimation animation="fade-in-up">
+                    <div className="text-left mb-8">
+                        <h2 className="text-3xl font-headline font-bold">
+                            {t('home.revoImpact.title')}
+                        </h2>
+                        <p className="mt-2 max-w-2xl text-muted-foreground">
+                            {t('home.revoImpact.subtitle')}
+                        </p>
+                    </div>
+                </ScrollAnimation>
+                <div className="grid md:grid-cols-2 gap-8 items-start">
+                    <ScrollAnimation animation="fade-in-left">
+                        <ProblemChart />
+                    </ScrollAnimation>
+                    <ScrollAnimation animation="fade-in-right" delay={200}>
+                        <SolutionChart />
+                    </ScrollAnimation>
+                </div>
+            </section>
 
             {/* Industrial Symbiosis Network */}
             <ScrollAnimation animation="fade-in-up" delay={200}>

@@ -30,6 +30,8 @@ export const translations = {
   'home.impact.waste.desc': { en: 'From entering landfills this year', hi: 'इस साल लैंडफिल में जाने से' },
   'home.impact.transactions': { en: 'Transactions', hi: 'लेन-देन' },
   'home.impact.transactions.desc': { en: 'Successful waste-to-value deals', hi: 'सफल वेस्ट-टू-वैल्यू सौदे' },
+  'home.revoImpact.title': { en: 'The REVO Impact', hi: 'रेवो का प्रभाव' },
+  'home.revoImpact.subtitle': { en: 'A clear comparison between the old linear model and the new circular economy.', hi: 'पुराने रैखिक मॉडल और नई चक्रीय अर्थव्यवस्था के बीच एक स्पष्ट तुलना।' },
   'home.symbiosis.title': { en: 'Industrial Symbiosis Network', hi: 'औद्योगिक सहजीवन नेटवर्क' },
   'home.symbiosis.subtitle': { en: 'Visualizing the live flow of materials in the circular economy.', hi: 'सर्कुलर इकोनॉमी में सामग्रियों के लाइव प्रवाह की कल्पना करना।' },
   'home.featured.title': { en: 'Latest Available Waste Streams', hi: 'नवीनतम उपलब्ध वेस्ट स्ट्रीम' },
