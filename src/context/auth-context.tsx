@@ -28,8 +28,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       .single();
 
     if (profile) {
-      // Backfill email if it's missing from the public profile
-      if (!profile.email && authUser.email) {
+      // Backfill email if it's missing from the public profile or desynced
+      if (authUser.email && profile.email !== authUser.email) {
         await supabase
           .from('profiles')
           .update({ email: authUser.email })

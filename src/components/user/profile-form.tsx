@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { useState, useTransition, useEffect } from 'react';
-import { Loader2, Building2, MapPin, Instagram, Facebook, Phone, Upload } from 'lucide-react';
+import { Loader2, Building2, MapPin, Instagram, Facebook, Phone, Upload, Mail } from 'lucide-react';
 import type { User } from '@/lib/types';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -32,6 +32,7 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/web
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
+  email: z.string().email('Please enter a valid email address.'),
   company: z.string().min(3, 'Company name is required.'),
   phone: z.string().regex(/^(?:\+91)?[6-9]\d{9}$/, 'Please enter a valid 10-digit Indian phone number.'),
   companyDescription: z.string().min(20, 'Company description must be at least 20 characters.'),
@@ -64,6 +65,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: user.name || '',
+      email: user.email || '',
       company: user.company || '',
       phone: user.phone || '',
       companyDescription: user.companyDescription || '',
@@ -95,8 +97,19 @@ export default function ProfileForm({ user }: ProfileFormProps) {
     
     startTransition(async () => {
         try {
-            const { logo, ...otherValues } = values;
+            const { logo, email, ...otherValues } = values;
             
+            if (email !== user.email) {
+                const { error: emailUpdateError } = await supabase.auth.updateUser({ email });
+                if (emailUpdateError) {
+                    throw new Error(`Email update failed: ${emailUpdateError.message}`);
+                }
+                toast({
+                    title: 'Confirm your new email',
+                    description: `A verification link has been sent to ${email}. Please check your inbox.`,
+                });
+            }
+
             let phone = otherValues.phone;
             if (phone && !phone.startsWith('+91')) {
                 phone = '+91' + phone.replace(/^\+?91/, '');
@@ -258,6 +271,26 @@ export default function ProfileForm({ user }: ProfileFormProps) {
 
         <Separator />
         <h3 className="text-lg font-medium">Contact Information</h3>
+
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Login Email</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input type="email" placeholder="your.email@company.com" {...field} className="pl-10"/>
+                </div>
+              </FormControl>
+              <FormDescription>
+                This is your login email. A verification link will be sent if you change it.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
