@@ -53,16 +53,6 @@ type AddProductFormProps = {
   categories: string[];
 };
 
-// Helper to convert file to data URI
-const fileToDataUri = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
-};
-
 
 export default function AddProductForm({ categories }: AddProductFormProps) {
   const [isPending, startTransition] = useTransition();
@@ -94,6 +84,7 @@ export default function AddProductForm({ categories }: AddProductFormProps) {
   }, [user, form]);
 
   const imageFile = form.watch('image');
+  const productName = form.watch('name');
   const productCategory = form.watch('category');
 
   useEffect(() => {
@@ -109,28 +100,29 @@ export default function AddProductForm({ categories }: AddProductFormProps) {
 
 
   const handleDescriptionSuggestion = useCallback(async () => {
-    if (imageFile?.[0] && productCategory) {
+    if (productName && productCategory && user?.company && user?.location) {
         setIsSuggestingDescription(true);
         try {
-            const dataUri = await fileToDataUri(imageFile[0]);
             const result = await suggestDescription({
-                photoDataUri: dataUri,
+                productName,
                 category: productCategory,
+                sellerCompany: user.company,
+                sellerLocation: user.location,
             });
             if (result.suggestedDescription) {
                 form.setValue('description', result.suggestedDescription, { shouldValidate: true });
                 toast({ title: "Description Suggested!", description: "AI has generated a description for you." });
             } else {
-                toast({ title: "Suggestion Skipped", description: "AI does not generate descriptions for this category.", variant: 'destructive'});
+                toast({ title: "Suggestion Failed", description: "The AI could not generate a description.", variant: 'destructive'});
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Description suggestion failed:', error);
-            toast({ title: "Suggestion Failed", description: "Could not generate a description.", variant: 'destructive'});
+            toast({ title: "Suggestion Failed", description: error.message || "Could not generate a description.", variant: 'destructive'});
         } finally {
             setIsSuggestingDescription(false);
         }
     }
-  }, [imageFile, productCategory, form, toast]);
+  }, [productName, productCategory, user, form, toast]);
 
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -175,9 +167,15 @@ export default function AddProductForm({ categories }: AddProductFormProps) {
     });
   }
   
-  const canSuggestDescription = productCategory && imageFile?.[0];
+  const canSuggestDescription = productName && productCategory;
   const suggestionDisabled = !canSuggestDescription || isSuggestingDescription;
-  const showTooltip = !productCategory && imageFile?.[0];
+  
+  const getTooltipText = () => {
+      if (!productName && !productCategory) return "Enter material name and category to enable AI suggestion.";
+      if (!productName) return "Please enter a material name first.";
+      if (!productCategory) return "Please select an industry sector first.";
+      return "";
+  };
 
   const suggestDescriptionButton = (
     <Button 
@@ -279,15 +277,17 @@ export default function AddProductForm({ categories }: AddProductFormProps) {
                 <div className="flex items-center justify-between">
                     <FormLabel>Chemical Composition & Condition</FormLabel>
                     <TooltipProvider>
-                        <Tooltip open={showTooltip ? true : undefined} delayDuration={100}>
+                        <Tooltip delayDuration={100}>
                             <TooltipTrigger asChild>
-                                <span tabIndex={0}>
+                                <span tabIndex={suggestionDisabled ? 0 : -1}>
                                     {suggestDescriptionButton}
                                 </span>
                             </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Please select an industry sector first.</p>
-                            </TooltipContent>
+                            {suggestionDisabled && !isSuggestingDescription && (
+                                <TooltipContent>
+                                    <p>{getTooltipText()}</p>
+                                </TooltipContent>
+                            )}
                         </Tooltip>
                     </TooltipProvider>
                 </div>
