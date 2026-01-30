@@ -155,7 +155,12 @@ export default {
         'node-pulse': {
             '0%, 100%': { transform: 'scale(1)', opacity: '1' },
             '50%': { transform: 'scale(1.2)', opacity: '0.8' },
-        }
+        },
+        'shine': {
+          'to': {
+            'background-position': '-200% center',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -169,9 +174,11 @@ export default {
         'gradient-shift': 'gradient-shift 15s ease infinite',
         'hero-glow': 'hero-glow 8s ease-in-out infinite',
         'node-pulse': 'node-pulse 2.5s ease-in-out infinite',
+        'shine': 'shine 3s linear infinite',
       },
       backgroundSize: {
         '400%': '400% 400%',
+        '200%': '200% auto',
       }
     },
   },
