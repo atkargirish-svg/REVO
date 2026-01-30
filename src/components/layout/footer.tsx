@@ -12,7 +12,7 @@ export default function Footer() {
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
              <Link href="/about" className="hover:text-primary transition-colors">About Us</Link>
              <span className="text-muted-foreground/50">|</span>
-             <Link href="/top-sellers" className="hover:text-primary transition-colors">Top Producers</Link>
+             <Link href="/top-sellers" className="hover:text-primary transition-colors">Producers</Link>
              <span className="text-muted-foreground/50">|</span>
              <Link href="/analytics" className="hover:text-primary transition-colors">Our Impact</Link>
         </div>

@@ -12,6 +12,7 @@ export default function MainNav() {
   const routes = [
     { href: '/', label: 'Home' },
     { href: '/products', label: 'Marketplace' },
+    { href: '/top-sellers', label: 'Producers' },
     ...(user ? [{ href: '/dashboard', label: 'My Waste' }] : []),
     { href: '/analytics', label: 'Analytics' },
     ...(user?.isAdmin ? [{ href: '/admin/dashboard', label: 'Admin Panel' }] : []),
@@ -25,7 +26,7 @@ export default function MainNav() {
           href={route.href}
           className={cn(
             'text-sm font-medium transition-colors hover:text-primary',
-            pathname === route.href
+            (route.href !== '/' && pathname.startsWith(route.href)) || pathname === route.href
               ? 'text-foreground'
               : 'text-foreground/60'
           )}
