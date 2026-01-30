@@ -12,7 +12,5 @@ export const ChatInputSchema = z.object({
 });
 export type ChatInput = z.infer<typeof ChatInputSchema>;
 
-export const ChatOutputSchema = z.object({
-  response: z.string(),
-});
-export type ChatOutput = z.infer<typeof ChatOutputSchema>;
+// The output type is now more complex and defined directly in the `chat-flow.ts`
+// to include product data. We remove the output schema from this shared file.

@@ -2,11 +2,14 @@
 
 import Groq from 'groq-sdk';
 import { getProducts, getUsers } from '@/lib/data';
-import { 
-    type ChatInput, 
-    type ChatOutput 
-} from './chat-types';
+import type { ChatInput } from './chat-types';
 import type { Product, User } from '@/lib/types';
+
+// Define the output type here to include an optional product
+export type ChatOutput = {
+  response: string;
+  product?: Product;
+};
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
@@ -51,7 +54,8 @@ export async function chat(input: ChatInput): Promise<ChatOutput> {
 
     When a user asks about a product (e.g., "tell me about the textile sludge"), use the data to describe it, mention its price, and who the seller is.
     When a user asks about a seller (e.g., "who is Acme Manufacturing?"), provide their details.
-    Keep your answers concise, helpful, and engaging. Do not make up information. If you don't have the information, say so in a friendly manner.
+    
+    IMPORTANT: Keep your answers concise, friendly, and to the point. Do not give long, boring paragraphs. If you are describing a product, keep the description to 1-2 sentences.
     `;
 
     // 3. Construct the messages array for the API call
@@ -79,9 +83,21 @@ export async function chat(input: ChatInput): Promise<ChatOutput> {
 
     const text = llmResponse.choices[0]?.message?.content || 'Sorry, I could not generate a response.';
     
+    // 5. Check if the response mentions a product and embed the product object
+    let foundProduct: Product | undefined = undefined;
+    for (const product of products) {
+        // Use a simple includes check.
+        if (text.toLowerCase().includes(product.name.toLowerCase())) {
+            foundProduct = product;
+            break; // Stop after finding the first match
+        }
+    }
+
     return {
       response: text,
+      product: foundProduct, // Will be undefined if no product is found
     };
+
   } catch(e: any) {
     console.error("Error with Groq API:", e);
     throw new Error(`Groq API failed: ${e.message || 'An unknown error occurred.'}`);

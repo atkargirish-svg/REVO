@@ -5,17 +5,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter, SheetDescription } from '@/components/ui/sheet';
 import { Send, Loader2, Bot, User, MessageCircle, Volume2, VolumeX } from 'lucide-react';
-import { chat } from '@/ai/flows/chat-flow';
+import { chat, type ChatOutput } from '@/ai/flows/chat-flow';
 import type { ChatInput } from '@/ai/flows/chat-types';
+import type { Product } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import ChatProductCard from './chat-product-card';
 
 type Message = {
   role: 'user' | 'model';
   content: string;
+  product?: Product;
 };
 
 export default function ChatWidget() {
@@ -68,8 +71,12 @@ export default function ChatWidget() {
           history: messages.map(m => ({role: m.role, content: m.content})),
           message: currentInput,
         };
-        const result = await chat(chatInput);
-        const modelMessage: Message = { role: 'model', content: result.response };
+        const result: ChatOutput = await chat(chatInput);
+        const modelMessage: Message = { 
+            role: 'model', 
+            content: result.response,
+            product: result.product
+        };
         setMessages([...newMessages, modelMessage]);
       } catch (error: any) {
         const errorMessage: Message = { role: 'model', content: `Sorry, something went wrong: ${error.message}` };
@@ -95,7 +102,7 @@ export default function ChatWidget() {
             <div>
                 <SheetTitle>AI Assistant</SheetTitle>
                 <SheetDescription>
-                    AI assistant by Atharva Atkar.
+                    Your guide to the REVO marketplace.
                 </SheetDescription>
             </div>
             <TooltipProvider>
@@ -131,14 +138,17 @@ export default function ChatWidget() {
                         </Avatar>
                     )}
                     <div className={cn(
-                        "max-w-[75%] p-3 rounded-lg", 
+                        "max-w-[75%] rounded-lg", 
                         message.role === 'user' 
                             ? "bg-primary text-primary-foreground" 
                             : "bg-muted"
                     )}>
-                        <ReactMarkdown className="prose prose-sm dark:prose-invert max-w-none">
-                            {message.content}
-                        </ReactMarkdown>
+                        <div className="p-3">
+                            <ReactMarkdown className="prose prose-sm dark:prose-invert max-w-none">
+                                {message.content}
+                            </ReactMarkdown>
+                        </div>
+                        {message.product && <ChatProductCard product={message.product} />}
                     </div>
                       {message.role === 'user' && (
                         <Avatar>
