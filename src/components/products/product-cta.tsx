@@ -40,14 +40,14 @@ export default function ProductCta({ product, seller }: ProductCtaProps) {
   }, [product.id]);
 
   const whatsappMessage = buyer
-    ? `Hello, I'm ${buyer.name} from ${buyer.company}. I am interested in your listing for '${product.name}' (ID: ${product.id}) on the REVO marketplace. Could you please provide further details regarding availability and logistics? Thank you.`
-    : `Hello, I am interested in your listing for '${product.name}' (ID: ${product.id}) on the REVO marketplace. Could you please provide further details regarding availability and logistics? Thank you.`;
+    ? `Hello, I'm ${buyer.name} from ${buyer.company}. I am interested in your listing for '${product.name}' on the REVO marketplace. Could you please provide further details regarding availability and logistics? Thank you.`
+    : `Hello, I am interested in your listing for '${product.name}' on the REVO marketplace. Could you please provide further details regarding availability and logistics? Thank you.`;
   const whatsappUrl = seller && seller.phone ? `https://wa.me/${seller.phone.replace('+', '')}?text=${encodeURIComponent(whatsappMessage)}` : '#';
 
-  const emailSubject = `Inquiry Regarding Waste Material Listing: ${product.name} (ID: ${product.id})`;
+  const emailSubject = `Inquiry Regarding Waste Material Listing: ${product.name}`;
   const emailBody = buyer
-    ? `Dear ${seller?.name || 'Seller'},\n\nMy name is ${buyer.name}, and I represent ${buyer.company}.\n\nI am writing to express our interest in your waste material listing for '${product.name}' (ID: ${product.id}) on the REVO marketplace.\n\nWe would be grateful if you could provide us with more information regarding the material's specifications, current availability, and potential logistics for procurement.\n\nThank you for your time and consideration. We look forward to hearing from you soon.\n\nBest regards,\n${buyer.name}\n${buyer.company}`
-    : `Dear ${seller?.name || 'Seller'},\n\nI am writing to express interest in your waste material listing for '${product.name}' (ID: ${product.id}) on the REVO marketplace.\n\nWe would be grateful if you could provide us with more information regarding the material's specifications, current availability, and potential logistics for procurement.\n\nThank you for your time and consideration. We look forward to hearing from you soon.\n\nBest regards,`;
+    ? `Dear ${seller?.name || 'Seller'},\n\nMy name is ${buyer.name}, and I represent ${buyer.company}.\n\nI am writing to express our interest in your waste material listing for '${product.name}' on the REVO marketplace.\n\nWe would be grateful if you could provide us with more information regarding the material's specifications, current availability, and potential logistics for procurement.\n\nThank you for your time and consideration. We look forward to hearing from you soon.\n\nBest regards,\n${buyer.name}\n${buyer.company}`
+    : `Dear ${seller?.name || 'Seller'},\n\nI am writing to express interest in your waste material listing for '${product.name}' on the REVO marketplace.\n\nWe would be grateful if you could provide us with more information regarding the material's specifications, current availability, and potential logistics for procurement.\n\nThank you for your time and consideration. We look forward to hearing from you soon.\n\nBest regards,`;
   const mailtoUrl = seller && seller.email
     ? `mailto:${seller.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`
     : '#';
