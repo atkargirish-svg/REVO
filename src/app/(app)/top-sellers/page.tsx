@@ -16,11 +16,8 @@ export default function ProducersDirectoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    setFilteredUsers(users);
-  }, [users]);
-
-  useEffect(() => {
-    let tempUsers = [...users];
+    // Start with only users who have a complete profile
+    let tempUsers = users.filter(u => u.companyDescription && u.location);
 
     if (searchTerm) {
       tempUsers = tempUsers.filter(u =>
