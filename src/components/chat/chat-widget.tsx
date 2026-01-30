@@ -73,7 +73,7 @@ export default function ChatWidget() {
         <SheetHeader className="p-6 pb-4">
           <SheetTitle>AI Assistant</SheetTitle>
           <SheetDescription>
-            Chat with our Groq-powered AI. Ask anything about industrial waste or the circular economy.
+            I am REVO, an AI assistant created by Atharva Atkar. Ask me anything about the products!
           </SheetDescription>
         </SheetHeader>
         <ScrollArea className="flex-1 px-6" viewportRef={scrollAreaRef}>
@@ -83,7 +83,7 @@ export default function ChatWidget() {
                     <AvatarFallback><Bot /></AvatarFallback>
                 </Avatar>
                 <div className="max-w-[75%] p-3 rounded-lg bg-muted">
-                    <p>Hello! How can I help you today?</p>
+                    <p>Hi! I'm REVO, your AI assistant. I was created by Atharva Atkar from Suryodaya College of Engineering, Nagpur. Ask me anything about the products on this platform!</p>
                 </div>
             </div>
             {messages.map((message, index) => (
