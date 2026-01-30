@@ -4,27 +4,24 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
-import { Home, ShoppingCart, MessageCircle, UserCircle, LayoutDashboard } from 'lucide-react';
+import { Home, ShoppingCart, UserCircle, LayoutDashboard } from 'lucide-react';
 
 export default function BottomNav() {
   const pathname = usePathname();
   const { user, loading } = useAuth();
 
-  // Shortened labels for better fit on mobile
   const loggedOutRoutes = [
     { href: '/', label: 'Home', icon: Home, active: pathname === '/' },
     { href: '/products', label: 'Market', icon: ShoppingCart, active: pathname.startsWith('/products') },
-    { href: '/chat', label: 'Chat', icon: MessageCircle, active: pathname.startsWith('/chat') },
     { href: '/login', label: 'Login', icon: UserCircle, active: pathname === '/login' },
   ];
 
   const loggedInRoutes = [
     { href: '/', label: 'Home', icon: Home, active: pathname === '/' },
     { href: '/products', label: 'Market', icon: ShoppingCart, active: pathname.startsWith('/products') },
-    { href: '/chat', label: 'Chat', icon: MessageCircle, active: pathname.startsWith('/chat') },
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, active: pathname.startsWith('/dashboard') },
     { href: '/profile', label: 'Profile', icon: UserCircle, active: pathname === '/profile' },
-  ].slice(0, 5);
+  ];
 
   const routes = user ? loggedInRoutes : loggedOutRoutes;
 
