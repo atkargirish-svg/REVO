@@ -63,7 +63,7 @@ export function SignupForm() {
           description: authError.message,
         });
       } else if (authData.user) {
-        // Upsert the profile to include the email, which isn't handled by the default trigger.
+        // Explicitly upsert the profile to include the email. This is more reliable than a trigger.
         const { error: profileError } = await supabase.from('profiles').upsert({
             id: authData.user.id,
             display_name: values.name,
