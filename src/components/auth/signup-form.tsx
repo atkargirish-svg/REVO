@@ -44,7 +44,7 @@ export function SignupForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
-      const { data, error } = await supabase.auth.signUp({
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
         options: {
@@ -56,13 +56,26 @@ export function SignupForm() {
         },
       });
 
-      if (error) {
+      if (authError) {
         toast({
           variant: 'destructive',
           title: 'Signup Failed',
-          description: error.message,
+          description: authError.message,
         });
-      } else if (data.user) {
+      } else if (authData.user) {
+        // Upsert the profile to include the email, which isn't handled by the default trigger.
+        const { error: profileError } = await supabase.from('profiles').upsert({
+            id: authData.user.id,
+            display_name: values.name,
+            college: values.company,
+            email: values.email
+        });
+
+        if (profileError) {
+            // Log the error for debugging but don't block the user.
+            console.error("Error saving profile on signup:", profileError);
+        }
+
         toast({
             title: 'Account Created!',
             description: "Welcome to REVO. Please complete your company profile.",

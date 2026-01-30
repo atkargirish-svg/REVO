@@ -28,10 +28,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       .single();
 
     if (profile) {
+      // Backfill email if it's missing from the public profile
+      if (!profile.email && authUser.email) {
+        await supabase
+          .from('profiles')
+          .update({ email: authUser.email })
+          .eq('id', authUser.id);
+        profile.email = authUser.email; // Update local object for immediate use
+      }
+
       setUser({
         id: profile.id,
         name: profile.display_name || 'New User',
-        email: authUser.email || '',
+        email: profile.email || authUser.email || '', // Prioritize profile email, fallback to auth
         company: profile.college || 'Unnamed Company', // 'college' field from DB mapped to 'company'
         phone: profile.phone_number,
         avatar: profile.avatar || null,
