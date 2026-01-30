@@ -30,7 +30,7 @@ export async function chat(input: ChatInput): Promise<ChatOutput> {
 
     const llmResponse = await groq.chat.completions.create({
       messages: messages as any,
-      model: 'mixtral-8x7b-32768', // Switched to a stable, powerful model on Groq
+      model: 'gemma-7b-it', // Switched to a stable, available model on Groq
       temperature: 0.7,
     });
 
