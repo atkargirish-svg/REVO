@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
+import { useTranslation } from '@/hooks/use-translation';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -31,6 +32,7 @@ export function SignupForm() {
   const { toast } = useToast();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const { t } = useTranslation();
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,7 +61,7 @@ export function SignupForm() {
       if (authError) {
         toast({
           variant: 'destructive',
-          title: 'Signup Failed',
+          title: t('signup.toast.fail'),
           description: authError.message,
         });
       } else if (authData.user) {
@@ -77,8 +79,8 @@ export function SignupForm() {
         }
 
         toast({
-            title: 'Account Created!',
-            description: "Welcome to REVO. Please complete your company profile.",
+            title: t('signup.toast.success'),
+            description: t('signup.toast.welcome'),
         });
         router.push('/profile');
         router.refresh();
@@ -94,7 +96,7 @@ export function SignupForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Full Name</FormLabel>
+              <FormLabel>{t('signup.form.name')}</FormLabel>
               <FormControl>
                 <Input placeholder="John Doe" {...field} />
               </FormControl>
@@ -107,7 +109,7 @@ export function SignupForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Work Email</FormLabel>
+              <FormLabel>{t('signup.form.email')}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
@@ -124,7 +126,7 @@ export function SignupForm() {
           name="company"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Company Name</FormLabel>
+              <FormLabel>{t('signup.form.company')}</FormLabel>
               <FormControl>
                 <Input placeholder="e.g., Acme Manufacturing" {...field} />
               </FormControl>
@@ -137,7 +139,7 @@ export function SignupForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>{t('signup.form.password')}</FormLabel>
               <FormControl>
                 <Input type="password" placeholder="••••••••" {...field} />
               </FormControl>
@@ -147,7 +149,7 @@ export function SignupForm() {
         />
         <Button type="submit" className="w-full" disabled={isPending}>
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Create Account
+          {t('signup.form.submit')}
         </Button>
       </form>
     </Form>

@@ -1,26 +1,41 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import { getProducts } from '@/lib/data';
+import type { Product } from '@/lib/types';
 import ProductCard from './product-card';
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/hooks/use-translation';
 
-export default async function FeaturedProducts() {
-  const allProducts = await getProducts();
-  // Show the 4 most recent, unsold products
-  const featuredProducts = allProducts
-    .filter(p => !p.isSold)
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .slice(0, 4);
+export default function FeaturedProducts() {
+  const { t } = useTranslation();
+  const [products, setProducts] = useState<Product[]>([]);
 
-  if (featuredProducts.length === 0) {
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const allProducts = await getProducts();
+      const featuredProducts = allProducts
+        .filter(p => !p.isSold)
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .slice(0, 4);
+      setProducts(featuredProducts);
+    };
+
+    fetchProducts();
+  }, []);
+
+
+  if (products.length === 0) {
     return (
         <div className="text-center mt-8 text-muted-foreground">
-            No featured products available at the moment.
+            {t('featured.none')}
         </div>
     )
   }
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      {featuredProducts.map((product, index) => (
+      {products.map((product, index) => (
         <div 
           key={product.id} 
           className={cn(

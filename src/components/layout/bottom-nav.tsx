@@ -5,22 +5,24 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { Home, ShoppingCart, UserCircle, LayoutDashboard } from 'lucide-react';
+import { useTranslation } from '@/hooks/use-translation';
 
 export default function BottomNav() {
   const pathname = usePathname();
   const { user, loading } = useAuth();
+  const { t } = useTranslation();
 
   const loggedOutRoutes = [
-    { href: '/', label: 'Home', icon: Home, active: pathname === '/' },
-    { href: '/products', label: 'Market', icon: ShoppingCart, active: pathname.startsWith('/products') },
-    { href: '/login', label: 'Login', icon: UserCircle, active: pathname === '/login' },
+    { href: '/', label: t('home'), icon: Home, active: pathname === '/' },
+    { href: '/products', label: t('market'), icon: ShoppingCart, active: pathname.startsWith('/products') },
+    { href: '/login', label: t('login'), icon: UserCircle, active: pathname === '/login' },
   ];
 
   const loggedInRoutes = [
-    { href: '/', label: 'Home', icon: Home, active: pathname === '/' },
-    { href: '/products', label: 'Market', icon: ShoppingCart, active: pathname.startsWith('/products') },
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, active: pathname.startsWith('/dashboard') },
-    { href: '/profile', label: 'Profile', icon: UserCircle, active: pathname === '/profile' },
+    { href: '/', label: t('home'), icon: Home, active: pathname === '/' },
+    { href: '/products', label: t('market'), icon: ShoppingCart, active: pathname.startsWith('/products') },
+    { href: '/dashboard', label: t('dashboard'), icon: LayoutDashboard, active: pathname.startsWith('/dashboard') },
+    { href: '/profile', label: t('profile'), icon: UserCircle, active: pathname === '/profile' },
   ];
 
   const routes = user ? loggedInRoutes : loggedOutRoutes;

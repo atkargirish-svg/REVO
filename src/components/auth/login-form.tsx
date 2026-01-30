@@ -18,6 +18,7 @@ import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
+import { useTranslation } from '@/hooks/use-translation';
 
 const formSchema = z.object({
   email: z.string().email('Please enter a valid email address.'),
@@ -29,6 +30,7 @@ export function LoginForm() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const { login } = useAuth();
+  const { t } = useTranslation();
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,13 +47,13 @@ export function LoginForm() {
       if (error) {
         toast({
           variant: "destructive",
-          title: 'Login Failed',
+          title: t('login.toast.fail'),
           description: error.message,
         });
       } else {
         toast({
-          title: 'Login Successful',
-          description: "Welcome back!",
+          title: t('login.toast.success'),
+          description: t('login.toast.welcome'),
         });
         router.refresh();
         router.push('/dashboard');
@@ -67,7 +69,7 @@ export function LoginForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t('login.form.email')}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
@@ -84,7 +86,7 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>{t('login.form.password')}</FormLabel>
               <FormControl>
                 <Input type="password" placeholder="••••••••" {...field} />
               </FormControl>
@@ -94,7 +96,7 @@ export function LoginForm() {
         />
         <Button type="submit" className="w-full" disabled={isPending}>
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Login
+          {t('login.form.submit')}
         </Button>
       </form>
     </Form>

@@ -10,23 +10,25 @@ import {
 } from '@/components/ui/card';
 import { SignupForm } from '@/components/auth/signup-form';
 import { PageTransitionWrapper } from '@/components/page-transition-wrapper';
+import { useTranslation } from '@/hooks/use-translation';
 
 export default function SignupPage() {
+  const { t } = useTranslation();
   return (
     <PageTransitionWrapper>
       <Card className="mx-auto max-w-sm w-[380px]">
         <CardHeader>
-          <CardTitle className="text-2xl font-headline">Create a Producer Account</CardTitle>
+          <CardTitle className="text-2xl font-headline">{t('signup.title')}</CardTitle>
           <CardDescription>
-            Join the circular economy. Create an account to start diverting waste.
+            {t('signup.description')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <SignupForm />
           <div className="mt-4 text-center text-sm">
-            Already have an account?{' '}
+            {t('signup.haveAccount')}{' '}
             <Link href="/login" className="underline text-primary hover:text-primary/80">
-              Login
+              {t('login')}
             </Link>
           </div>
         </CardContent>

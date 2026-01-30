@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import {
   Card,
@@ -8,23 +10,26 @@ import {
 } from '@/components/ui/card';
 import { LoginForm } from '@/components/auth/login-form';
 import { PageTransitionWrapper } from '@/components/page-transition-wrapper';
+import { useTranslation } from '@/hooks/use-translation';
 
 export default function LoginPage() {
+  const { t } = useTranslation();
+
   return (
     <PageTransitionWrapper>
       <Card className="mx-auto max-w-sm w-[380px]">
         <CardHeader>
-          <CardTitle className="text-2xl font-headline">Login</CardTitle>
+          <CardTitle className="text-2xl font-headline">{t('login.title')}</CardTitle>
           <CardDescription>
-            Welcome back! Enter your details to access your account.
+            {t('login.description')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <LoginForm />
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{' '}
+            {t('login.noAccount')}{' '}
             <Link href="/signup" className="underline text-primary hover:text-primary/80">
-              Sign up
+              {t('signup')}
             </Link>
           </div>
         </CardContent>

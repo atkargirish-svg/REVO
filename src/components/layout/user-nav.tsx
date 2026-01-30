@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -21,11 +20,13 @@ import { useAuth } from '@/context/auth-context';
 import { LogOut, LayoutDashboard, UserCircle, Monitor, Sun, Moon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
+import { useTranslation } from '@/hooks/use-translation';
 
 export default function UserNav() {
   const { user, logout, loading } = useAuth();
   const { setTheme } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const handleLogout = () => {
     logout();
@@ -42,7 +43,7 @@ export default function UserNav() {
   if (!user) {
     return (
       <Button asChild>
-        <Link href="/login">Login / Register</Link>
+        <Link href="/login">{t('loginRegister')}</Link>
       </Button>
     );
   }
@@ -71,13 +72,13 @@ export default function UserNav() {
           <Link href="/dashboard">
             <DropdownMenuItem className="cursor-pointer">
               <LayoutDashboard className="mr-2 h-4 w-4" />
-              <span>Dashboard</span>
+              <span>{t('dashboard')}</span>
             </DropdownMenuItem>
           </Link>
           <Link href="/profile">
             <DropdownMenuItem className="cursor-pointer">
               <UserCircle className="mr-2 h-4 w-4" />
-              <span>Profile</span>
+              <span>{t('profile')}</span>
             </DropdownMenuItem>
           </Link>
         </DropdownMenuGroup>
@@ -85,21 +86,21 @@ export default function UserNav() {
          <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <Monitor className="mr-2 h-4 w-4" />
-            <span>Theme</span>
+            <span>{t('theme')}</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
             <DropdownMenuSubContent>
               <DropdownMenuItem onClick={() => setTheme('light')}>
                 <Sun className="mr-2 h-4 w-4" />
-                <span>Light</span>
+                <span>{t('light')}</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme('dark')}>
                 <Moon className="mr-2 h-4 w-4" />
-                <span>Dark</span>
+                <span>{t('dark')}</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme('system')}>
                 <Monitor className="mr-2 h-4 w-4" />
-                <span>System</span>
+                <span>{t('system')}</span>
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
@@ -107,7 +108,7 @@ export default function UserNav() {
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Logout</span>
+          <span>{t('logout')}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

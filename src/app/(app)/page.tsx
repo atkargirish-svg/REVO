@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { PageTransitionWrapper } from '@/components/page-transition-wrapper';
@@ -7,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { WasteDivertedChart } from '@/components/dashboard/waste-diverted-chart';
 import Image from 'next/image';
 import { ScrollAnimation } from '@/components/scroll-animation';
+import { useTranslation } from '@/hooks/use-translation';
 
 const StatCard = ({ icon, title, value, description }: { icon: React.ReactNode, title: string, value: string, description: string }) => {
     return (
@@ -23,62 +26,67 @@ const StatCard = ({ icon, title, value, description }: { icon: React.ReactNode, 
     )
 }
 
-const IndustrialSymbiosisNetwork = () => (
-    <div className="w-full bg-card border rounded-lg p-6 overflow-hidden">
-        <svg width="100%" viewBox="0 0 800 300" className="max-h-[350px]">
-            {/* Lines */}
-            <line x1="100" y1="150" x2="250" y2="100" stroke="hsl(var(--border))" strokeWidth="1.5" />
-            <line x1="100" y1="150" x2="250" y2="200" stroke="hsl(var(--border))" strokeWidth="1.5" />
-            <line x1="250" y1="100" x2="400" y2="150" stroke="hsl(var(--border))" strokeWidth="1.5" />
-            <line x1="250" y1="200" x2="400" y2="150" stroke="hsl(var(--border))" strokeWidth="1.5" />
-            <line x1="400" y1="150" x2="550" y2="100" stroke="hsl(var(--border))" strokeWidth="1.5" />
-            <line x1="400" y1="150" x2="550" y2="200" stroke="hsl(var(--border))" strokeWidth="1.5" />
-            <line x1="550" y1="100" x2="700" y2="150" stroke="hsl(var(--border))" strokeWidth="1.5" />
-            <line x1="550" y1="200" x2="700" y2="150" stroke="hsl(var(--border))" strokeWidth="1.5" />
-            <line x1="250" y1="100" x2="550" y2="100" stroke="hsl(var(--border))" strokeWidth="1" strokeDasharray="4" />
-            <line x1="250" y1="200" x2="550" y2="200" stroke="hsl(var(--border))" strokeWidth="1" strokeDasharray="4" />
+const IndustrialSymbiosisNetwork = () => {
+    const { t } = useTranslation();
+    return (
+        <div className="w-full bg-card border rounded-lg p-6 overflow-hidden">
+            <svg width="100%" viewBox="0 0 800 300" className="max-h-[350px]">
+                {/* Lines */}
+                <line x1="100" y1="150" x2="250" y2="100" stroke="hsl(var(--border))" strokeWidth="1.5" />
+                <line x1="100" y1="150" x2="250" y2="200" stroke="hsl(var(--border))" strokeWidth="1.5" />
+                <line x1="250" y1="100" x2="400" y2="150" stroke="hsl(var(--border))" strokeWidth="1.5" />
+                <line x1="250" y1="200" x2="400" y2="150" stroke="hsl(var(--border))" strokeWidth="1.5" />
+                <line x1="400" y1="150" x2="550" y2="100" stroke="hsl(var(--border))" strokeWidth="1.5" />
+                <line x1="400" y1="150" x2="550" y2="200" stroke="hsl(var(--border))" strokeWidth="1.5" />
+                <line x1="550" y1="100" x2="700" y2="150" stroke="hsl(var(--border))" strokeWidth="1.5" />
+                <line x1="550" y1="200" x2="700" y2="150" stroke="hsl(var(--border))" strokeWidth="1.5" />
+                <line x1="250" y1="100" x2="550" y2="100" stroke="hsl(var(--border))" strokeWidth="1" strokeDasharray="4" />
+                <line x1="250" y1="200" x2="550" y2="200" stroke="hsl(var(--border))" strokeWidth="1" strokeDasharray="4" />
 
-            {/* Nodes */}
-            <g className="animate-node-pulse">
-                <circle cx="100" cy="150" r="10" fill="hsl(var(--primary))" className="origin-center" />
-                <text x="100" y="185" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="14" fontWeight="bold">Factory A</text>
-            </g>
-            
-            <g>
-                <circle cx="250" cy="100" r="9" fill="hsl(var(--secondary))" />
-                <text x="250" y="75" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="12">Recycler X</text>
-            </g>
-            
-            <g>
-                <circle cx="250" cy="200" r="9" fill="hsl(var(--secondary))" />
-                <text x="250" y="235" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="12">Manufacturer Y</text>
-            </g>
+                {/* Nodes */}
+                <g className="animate-node-pulse">
+                    <circle cx="100" cy="150" r="10" fill="hsl(var(--primary))" className="origin-center" />
+                    <text x="100" y="185" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="14" fontWeight="bold">{t('factoryA')}</text>
+                </g>
+                
+                <g>
+                    <circle cx="250" cy="100" r="9" fill="hsl(var(--secondary))" />
+                    <text x="250" y="75" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="12">{t('recyclerX')}</text>
+                </g>
+                
+                <g>
+                    <circle cx="250" cy="200" r="9" fill="hsl(var(--secondary))" />
+                    <text x="250" y="235" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="12">{t('manufacturerY')}</text>
+                </g>
 
-            <g className="animate-node-pulse" style={{ animationDelay: '0.5s' }}>
-                <circle cx="400" cy="150" r="10" fill="hsl(var(--primary))" className="origin-center"/>
-                <text x="400" y="185" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="14" fontWeight="bold">Factory B</text>
-            </g>
+                <g className="animate-node-pulse" style={{ animationDelay: '0.5s' }}>
+                    <circle cx="400" cy="150" r="10" fill="hsl(var(--primary))" className="origin-center"/>
+                    <text x="400" y="185" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="14" fontWeight="bold">{t('factoryB')}</text>
+                </g>
 
-            <g>
-                <circle cx="550" cy="100" r="9" fill="hsl(var(--secondary))" />
-                <text x="550" y="75" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="12">Cement Plant</text>
-            </g>
-            
-            <g>
-                <circle cx="550" cy="200" r="9" fill="hsl(var(--secondary))" />
-                <text x="550" y="235" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="12">Textile Unit</text>
-            </g>
+                <g>
+                    <circle cx="550" cy="100" r="9" fill="hsl(var(--secondary))" />
+                    <text x="550" y="75" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="12">{t('cementPlant')}</text>
+                </g>
+                
+                <g>
+                    <circle cx="550" cy="200" r="9" fill="hsl(var(--secondary))" />
+                    <text x="550" y="235" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="12">{t('textileUnit')}</text>
+                </g>
 
-            <g className="animate-node-pulse" style={{ animationDelay: '1s' }}>
-                <circle cx="700" cy="150" r="10" fill="hsl(var(--primary))" className="origin-center"/>
-                <text x="700" y="185" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="14" fontWeight="bold">Factory C</text>
-            </g>
-        </svg>
-    </div>
-);
+                <g className="animate-node-pulse" style={{ animationDelay: '1s' }}>
+                    <circle cx="700" cy="150" r="10" fill="hsl(var(--primary))" className="origin-center"/>
+                    <text x="700" y="185" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="14" fontWeight="bold">{t('factoryC')}</text>
+                </g>
+            </svg>
+        </div>
+    )
+};
 
 
 export default function HomePage() {
+  const { t } = useTranslation();
+
   return (
     <PageTransitionWrapper>
       {/* Hero Section */}
@@ -97,17 +105,17 @@ export default function HomePage() {
         <div className="relative container px-4">
             <div className="mx-auto max-w-4xl flex flex-col items-center gap-6 animate-fade-in-up">
                 <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight font-headline text-white shadow-sm">
-                    Turn Industrial Waste into Raw Material.
+                    {t('home.hero.title')}
                 </h1>
                 <p className="max-w-2xl text-lg text-neutral-200 sm:text-xl">
-                    AI-Powered Circular Economy Platform. Connect your factory output with recyclers instantly.
+                    {t('home.hero.subtitle')}
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-4 w-full sm:w-auto">
                     <Button asChild size="lg" variant="default">
-                        <Link href="/products">Explore Marketplace</Link>
+                        <Link href="/products">{t('home.hero.explore')}</Link>
                     </Button>
                     <Button asChild size="lg" variant="secondary">
-                        <Link href="/dashboard/add-product">List a Waste Stream</Link>
+                        <Link href="/dashboard/add-product">{t('home.hero.list')}</Link>
                     </Button>
                 </div>
             </div>
@@ -120,30 +128,30 @@ export default function HomePage() {
             {/* Live Impact Tracker */}
             <div>
                 <ScrollAnimation animation="fade-in-up">
-                    <h2 className="text-3xl font-bold font-headline mb-4">Live Impact Tracker</h2>
+                    <h2 className="text-3xl font-bold font-headline mb-4">{t('home.impact.title')}</h2>
                 </ScrollAnimation>
                 <div className="grid gap-4 md:grid-cols-3">
                     <ScrollAnimation animation="zoom-in" delay={0}>
                         <StatCard 
-                            title="CO2 Saved"
+                            title={t('home.impact.co2')}
                             value="12,450 kg"
-                            description="Equivalent to 500+ trees planted"
+                            description={t('home.impact.co2.desc')}
                             icon={<Leaf className="h-4 w-4 text-muted-foreground" />}
                         />
                     </ScrollAnimation>
                     <ScrollAnimation animation="zoom-in" delay={150}>
                         <StatCard 
-                            title="Waste Diverted"
+                            title={t('home.impact.waste')}
                             value="890 Tons"
-                            description="From entering landfills this year"
+                            description={t('home.impact.waste.desc')}
                             icon={<Recycle className="h-4 w-4 text-muted-foreground" />}
                         />
                     </ScrollAnimation>
                     <ScrollAnimation animation="zoom-in" delay={300}>
                         <StatCard 
-                            title="Transactions"
+                            title={t('home.impact.transactions')}
                             value="1,200+"
-                            description="Successful waste-to-value deals"
+                            description={t('home.impact.transactions.desc')}
                             icon={<Truck className="h-4 w-4 text-muted-foreground" />}
                         />
                     </ScrollAnimation>
@@ -160,10 +168,10 @@ export default function HomePage() {
               <section id="symbiosis-network">
                 <div className="text-left mb-8">
                   <h2 className="text-3xl font-headline font-bold">
-                    Industrial Symbiosis Network
+                    {t('home.symbiosis.title')}
                   </h2>
                   <p className="mt-2 max-w-2xl text-muted-foreground">
-                    Visualizing the live flow of materials in the circular economy.
+                    {t('home.symbiosis.subtitle')}
                   </p>
                 </div>
                 <IndustrialSymbiosisNetwork />
@@ -175,16 +183,16 @@ export default function HomePage() {
               <section id="featured-products">
                   <div className="text-left mb-8">
                   <h2 className="text-3xl font-headline font-bold">
-                      Latest Available Waste Streams
+                      {t('home.featured.title')}
                   </h2>
                   <p className="mt-2 max-w-2xl text-muted-foreground">
-                      High-value industrial byproducts ready for a second life.
+                      {t('home.featured.subtitle')}
                   </p>
                   </div>
                   <FeaturedProducts />
                   <div className="mt-12 text-center">
                       <Button asChild variant="outline" size="lg">
-                          <Link href="/products">View Full Marketplace</Link>
+                          <Link href="/products">{t('home.featured.viewAll')}</Link>
                       </Button>
                   </div>
               </section>
