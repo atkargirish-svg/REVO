@@ -7,6 +7,7 @@ import { MessageSquare, ShieldCheck, Copy, Mail } from 'lucide-react';
 import type { Product, User } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
+import { useAuth } from '@/context/auth-context';
 
 // Simple hash function for demo purposes
 const generateHash = (input: string) => {
@@ -31,17 +32,22 @@ interface ProductCtaProps {
 export default function ProductCta({ product, seller }: ProductCtaProps) {
   const { toast } = useToast();
   const [assetHash, setAssetHash] = useState('');
+  const { user: buyer } = useAuth();
 
   useEffect(() => {
     // Generate hash on client to avoid hydration mismatch
     setAssetHash(generateHash(product.id));
   }, [product.id]);
 
-  const whatsappMessage = `Hi, I'm interested in your waste material listing '${product.name}' on REVO.`;
+  const whatsappMessage = buyer
+    ? `Hello, I'm ${buyer.name} from ${buyer.company}. I am interested in your listing for '${product.name}' (ID: ${product.id}) on the REVO marketplace. Could you please provide further details regarding availability and logistics? Thank you.`
+    : `Hello, I am interested in your listing for '${product.name}' (ID: ${product.id}) on the REVO marketplace. Could you please provide further details regarding availability and logistics? Thank you.`;
   const whatsappUrl = seller && seller.phone ? `https://wa.me/${seller.phone.replace('+', '')}?text=${encodeURIComponent(whatsappMessage)}` : '#';
 
-  const emailSubject = `Interest in your product on REVO: ${product.name}`;
-  const emailBody = `Hi,\n\nI'm interested in your waste material listing '${product.name}' on the REVO marketplace.\n\nCould you please provide more details?`;
+  const emailSubject = `Inquiry Regarding Waste Material Listing: ${product.name} (ID: ${product.id})`;
+  const emailBody = buyer
+    ? `Dear ${seller?.name || 'Seller'},\n\nMy name is ${buyer.name}, and I represent ${buyer.company}.\n\nI am writing to express our interest in your waste material listing for '${product.name}' (ID: ${product.id}) on the REVO marketplace.\n\nWe would be grateful if you could provide us with more information regarding the material's specifications, current availability, and potential logistics for procurement.\n\nThank you for your time and consideration. We look forward to hearing from you soon.\n\nBest regards,\n${buyer.name}\n${buyer.company}`
+    : `Dear ${seller?.name || 'Seller'},\n\nI am writing to express interest in your waste material listing for '${product.name}' (ID: ${product.id}) on the REVO marketplace.\n\nWe would be grateful if you could provide us with more information regarding the material's specifications, current availability, and potential logistics for procurement.\n\nThank you for your time and consideration. We look forward to hearing from you soon.\n\nBest regards,`;
   const mailtoUrl = seller && seller.email
     ? `mailto:${seller.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`
     : '#';
