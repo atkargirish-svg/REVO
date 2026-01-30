@@ -52,6 +52,7 @@ export function SignupForm() {
             display_name: values.name,
             college: values.company, // Supabase user_metadata uses 'college' but we map to company
             avatar: null, // Set avatar to null initially
+            email: values.email,
           },
         },
       });

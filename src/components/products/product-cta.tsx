@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { MessageSquare, ShieldCheck, Copy } from 'lucide-react';
+import { MessageSquare, ShieldCheck, Copy, Mail } from 'lucide-react';
 import type { Product, User } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
@@ -40,26 +40,36 @@ export default function ProductCta({ product, seller }: ProductCtaProps) {
   const whatsappMessage = `Hi, I'm interested in your waste material listing '${product.name}' on REVO.`;
   const whatsappUrl = seller && seller.phone ? `https://wa.me/${seller.phone.replace('+', '')}?text=${encodeURIComponent(whatsappMessage)}` : '#';
 
-  const handleConnectClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (whatsappUrl === '#') {
-        e.preventDefault();
-        toast({
-            variant: "destructive",
-            title: "Could not connect",
-            description: "Producer's contact information is not available.",
-        });
-        return;
+  const emailSubject = `Interest in your product on REVO: ${product.name}`;
+  const emailBody = `Hi,\n\nI'm interested in your waste material listing '${product.name}' on the REVO marketplace.\n\nCould you please provide more details?`;
+  const mailtoUrl = seller && seller.email
+    ? `mailto:${seller.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`
+    : '#';
+
+  const handleConnectClick = (e: React.MouseEvent<HTMLAnchorElement>, type: 'whatsapp' | 'email') => {
+    const url = type === 'whatsapp' ? whatsappUrl : mailtoUrl;
+
+    if (url === '#') {
+      e.preventDefault();
+      toast({
+        variant: "destructive",
+        title: "Could not connect",
+        description: `Producer's ${type} information is not available.`,
+      });
+      return;
     }
     
-    e.preventDefault();
-    toast({
-      title: "🔗 Smart Contract Handshake Initiated",
-      description: "Secure connection is being established on the ledger.",
-    });
-    
-    setTimeout(() => {
-      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-    }, 500);
+    if (type === 'whatsapp') {
+        e.preventDefault();
+        toast({
+        title: "🔗 Smart Contract Handshake Initiated",
+        description: "Secure connection is being established on the ledger.",
+        });
+        
+        setTimeout(() => {
+        window.open(url, '_blank', 'noopener,noreferrer');
+        }, 500);
+    }
   };
   
   const copyHash = () => {
@@ -79,12 +89,20 @@ export default function ProductCta({ product, seller }: ProductCtaProps) {
           This waste stream has been diverted
         </Button>
       ) : (
-        <a href={whatsappUrl} onClick={handleConnectClick} className="block w-full">
-           <Button size="lg" className="w-full">
-            <MessageSquare className="mr-2 h-5 w-5" />
-            Connect with Producer
-          </Button>
-        </a>
+        <div className="grid grid-cols-2 gap-2">
+            <a href={whatsappUrl} onClick={(e) => handleConnectClick(e, 'whatsapp')} className="block w-full">
+                <Button size="lg" className="w-full">
+                    <MessageSquare className="mr-2 h-5 w-5" />
+                    WhatsApp
+                </Button>
+            </a>
+            <a href={mailtoUrl} onClick={(e) => handleConnectClick(e, 'email')} target="_blank" rel="noopener noreferrer" className="block w-full">
+                <Button size="lg" variant="outline" className="w-full">
+                    <Mail className="mr-2 h-5 w-5" />
+                    Email
+                </Button>
+            </a>
+        </div>
       )}
 
       {/* Blockchain Verification Section */}

@@ -228,7 +228,7 @@ export async function getProductById(id: string): Promise<Product | undefined> {
 const toUser = (profile: any): User => ({
   id: profile.id,
   name: profile.display_name || 'Unknown User',
-  email: `user-${profile.id.substring(0, 5)}@example.com`, // Mock email
+  email: profile.email || '',
   company: profile.college || 'Some Company',
   phone: profile.phone_number,
   avatar: profile.avatar || null,
