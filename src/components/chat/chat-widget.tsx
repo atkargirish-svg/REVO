@@ -120,7 +120,7 @@ export default function ChatWidget() {
                     <AvatarFallback><Bot /></AvatarFallback>
                 </Avatar>
                 <div className="max-w-[75%] p-3 rounded-lg bg-muted">
-                    <p>Hi! I'm REVO, your friendly AI assistant, created by Atharva Atkar from Suryodaya College of Engineering and Technology, Nagpur. How can I help you navigate the marketplace today?</p>
+                    <p>Hi! I'm REVO, your friendly marketplace assistant. How can I help you today?</p>
                 </div>
             </div>
             {messages.map((message, index) => (
