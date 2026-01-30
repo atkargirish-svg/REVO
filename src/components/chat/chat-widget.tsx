@@ -4,13 +4,14 @@ import { useState, useTransition, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter, SheetDescription } from '@/components/ui/sheet';
-import { Send, Loader2, Bot, User, MessageCircle } from 'lucide-react';
+import { Send, Loader2, Bot, User, MessageCircle, Volume2, VolumeX } from 'lucide-react';
 import { chat } from '@/ai/flows/chat-flow';
 import type { ChatInput } from '@/ai/flows/chat-types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 type Message = {
   role: 'user' | 'model';
@@ -18,8 +19,10 @@ type Message = {
 };
 
 export default function ChatWidget() {
+  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
+  const [isTtsEnabled, setIsTtsEnabled] = useState(false);
   const [isPending, startTransition] = useTransition();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -31,6 +34,23 @@ export default function ChatWidget() {
         });
     }
   }, [messages]);
+
+  useEffect(() => {
+    if (isTtsEnabled && messages.length > 0) {
+        const lastMessage = messages[messages.length - 1];
+        if (lastMessage.role === 'model') {
+            window.speechSynthesis.cancel(); // Stop any previous speech
+            const utterance = new SpeechSynthesisUtterance(lastMessage.content);
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+  }, [messages, isTtsEnabled]);
+  
+  useEffect(() => {
+      if (!isOpen) {
+          window.speechSynthesis.cancel();
+      }
+  }, [isOpen]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +79,7 @@ export default function ChatWidget() {
   };
 
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <Button
           size="icon"
@@ -71,10 +91,27 @@ export default function ChatWidget() {
       </SheetTrigger>
       <SheetContent className="flex flex-col p-0">
         <SheetHeader className="p-6 pb-4">
-          <SheetTitle>AI Assistant</SheetTitle>
-          <SheetDescription>
-            I am REVO, an AI assistant created by Atharva Atkar. Ask me anything about the products!
-          </SheetDescription>
+          <div className="flex justify-between items-center">
+            <div>
+                <SheetTitle>AI Assistant</SheetTitle>
+                <SheetDescription>
+                    I am REVO, an AI assistant created by Atharva Atkar.
+                </SheetDescription>
+            </div>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                         <Button variant="ghost" size="icon" onClick={() => setIsTtsEnabled(prev => !prev)}>
+                            {isTtsEnabled ? <Volume2 className="h-5 w-5 text-primary" /> : <VolumeX className="h-5 w-5 text-muted-foreground" />}
+                            <span className="sr-only">{isTtsEnabled ? 'Disable' : 'Enable'} voice</span>
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>{isTtsEnabled ? 'Disable' : 'Enable'} voice output</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+          </div>
         </SheetHeader>
         <ScrollArea className="flex-1 px-6" viewportRef={scrollAreaRef}>
           <div className="space-y-6">
