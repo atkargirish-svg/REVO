@@ -18,7 +18,7 @@ import ChatProductCard from './chat-product-card';
 type Message = {
   role: 'user' | 'model';
   content: string;
-  product?: Product;
+  products?: Product[];
 };
 
 export default function ChatWidget() {
@@ -75,7 +75,7 @@ export default function ChatWidget() {
         const modelMessage: Message = { 
             role: 'model', 
             content: result.response,
-            product: result.product
+            products: result.products
         };
         setMessages([...newMessages, modelMessage]);
       } catch (error: any) {
@@ -148,7 +148,15 @@ export default function ChatWidget() {
                                 {message.content}
                             </ReactMarkdown>
                         </div>
-                        {message.product && <ChatProductCard product={message.product} />}
+                        {message.products && message.products.length > 0 && (
+                            <div className="px-3 pt-1 pb-3 border-t border-background/50">
+                                <div className="flex gap-3 -mx-3 px-3 overflow-x-auto pb-2">
+                                    {message.products.map(product => (
+                                        <ChatProductCard key={product.id} product={product} />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                       {message.role === 'user' && (
                         <Avatar>

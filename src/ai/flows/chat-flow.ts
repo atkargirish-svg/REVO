@@ -5,10 +5,10 @@ import { getProducts, getUsers } from '@/lib/data';
 import type { ChatInput } from './chat-types';
 import type { Product, User } from '@/lib/types';
 
-// Define the output type here to include an optional product
+// Define the output type here to include an optional array of products
 export type ChatOutput = {
   response: string;
-  product?: Product;
+  products?: Product[];
 };
 
 const groq = new Groq({
@@ -47,12 +47,12 @@ export async function chat(input: ChatInput): Promise<ChatOutput> {
     // 2. Create a detailed system prompt
     const systemPrompt = `You are REVO, a helpful and friendly AI assistant for a B2B marketplace for industrial waste. Your tone should be professional, yet approachable. Your creator is Atharva Atkar from Suryodaya College of Engineering and Technology, Nagpur. If anyone asks who built or created you, you must say "I was built by Atharva Atkar from Suryodaya College of Engineering and Technology, Nagpur."
 
-    Your goal is to answer user questions based on the data provided below.
+    Your goal is to answer user questions based on the data provided below. If you find relevant products, mention them.
 
     Here is the list of all products currently on the platform:
     ${JSON.stringify(productsWithSellerInfo, null, 2)}
 
-    When a user asks about a product (e.g., "tell me about the textile sludge"), use the data to describe it, mention its price, and who the seller is.
+    When a user asks about products (e.g., "show me plastic waste"), use the data to describe them, mention their price, and who the seller is. If multiple products match, you can mention them.
     When a user asks about a seller (e.g., "who is Acme Manufacturing?"), provide their details.
     
     IMPORTANT: Keep your answers concise, friendly, and to the point. Do not give long, boring paragraphs. If you are describing a product, keep the description to 1-2 sentences.
@@ -83,19 +83,18 @@ export async function chat(input: ChatInput): Promise<ChatOutput> {
 
     const text = llmResponse.choices[0]?.message?.content || 'Sorry, I could not generate a response.';
     
-    // 5. Check if the response mentions a product and embed the product object
-    let foundProduct: Product | undefined = undefined;
-    for (const product of products) {
-        // Use a simple includes check.
-        if (text.toLowerCase().includes(product.name.toLowerCase())) {
-            foundProduct = product;
-            break; // Stop after finding the first match
-        }
-    }
+    // 5. Check if the response mentions any products and embed them
+    const foundProducts: Product[] = products
+      .filter(product => {
+        const lowerCaseText = text.toLowerCase();
+        return lowerCaseText.includes(product.name.toLowerCase()) || 
+               lowerCaseText.includes(product.category.toLowerCase())
+      })
+      .slice(0, 5); // Limit to top 5 matches
 
     return {
       response: text,
-      product: foundProduct, // Will be undefined if no product is found
+      products: foundProducts,
     };
 
   } catch(e: any) {
