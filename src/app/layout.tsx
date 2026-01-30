@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from '@/context/auth-context';
 import { ThemeProvider } from '@/components/theme-provider';
 import { LanguageProvider } from '@/context/language-context';
+import { DataProvider } from '@/context/data-context';
 
 export const metadata: Metadata = {
   title: 'REVO - Industrial Waste Exchange',
@@ -35,8 +36,10 @@ export default function RootLayout({
         >
           <LanguageProvider>
             <AuthProvider>
-              {children}
-              <Toaster />
+              <DataProvider>
+                {children}
+                <Toaster />
+              </DataProvider>
             </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>

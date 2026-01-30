@@ -1,28 +1,23 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getProducts } from '@/lib/data';
 import type { Product } from '@/lib/types';
 import ProductCard from './product-card';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/use-translation';
+import { useData } from '@/context/data-context';
 
 export default function FeaturedProducts() {
   const { t } = useTranslation();
+  const { products: allProducts } = useData();
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const allProducts = await getProducts();
-      const featuredProducts = allProducts
-        .filter(p => !p.isSold)
-        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        .slice(0, 4);
-      setProducts(featuredProducts);
-    };
-
-    fetchProducts();
-  }, []);
+    const featuredProducts = allProducts
+      .filter(p => !p.isSold)
+      .slice(0, 4);
+    setProducts(featuredProducts);
+  }, [allProducts]);
 
 
   if (products.length === 0) {

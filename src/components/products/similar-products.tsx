@@ -1,11 +1,10 @@
-
 'use client';
 
-import { useState, useEffect, useTransition } from 'react';
-import { getProducts } from '@/lib/data';
+import { useState, useEffect } from 'react';
 import type { Product } from '@/lib/types';
 import ProductCard from './product-card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useData } from '@/context/data-context';
 
 interface SimilarProductsProps {
   category: string;
@@ -13,12 +12,10 @@ interface SimilarProductsProps {
 }
 
 export default function SimilarProducts({ category, currentProductId }: SimilarProductsProps) {
+  const { products: allProducts, loading: isPending } = useData();
   const [similarProducts, setSimilarProducts] = useState<Product[]>([]);
-  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    startTransition(async () => {
-      const allProducts = await getProducts();
       const filteredProducts = allProducts
         .filter(p => 
           p.category === category && 
@@ -27,8 +24,7 @@ export default function SimilarProducts({ category, currentProductId }: SimilarP
         )
         .slice(0, 4); // Limit to 4 similar products
       setSimilarProducts(filteredProducts);
-    });
-  }, [category, currentProductId]);
+  }, [allProducts, category, currentProductId]);
 
   if (isPending) {
     return (

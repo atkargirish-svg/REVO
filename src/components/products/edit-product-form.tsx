@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition, useEffect, useCallback } from 'react';
+import { useState, useTransition, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -25,6 +25,7 @@ import { useAuth } from '@/context/auth-context';
 import Image from 'next/image';
 import type { Product } from '@/lib/types';
 import { PRODUCT_CATEGORIES } from '@/lib/constants';
+import { useData } from '@/context/data-context';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -56,6 +57,7 @@ export default function EditProductForm({ categories, product }: EditProductForm
   const { toast } = useToast();
   const router = useRouter();
   const { user } = useAuth();
+  const { refetchData } = useData();
   const [preview, setPreview] = useState<string | null>(product.imageId);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -121,8 +123,8 @@ export default function EditProductForm({ categories, product }: EditProductForm
           title: 'Waste Stream Updated!',
           description: `${values.name} has been successfully updated.`,
         });
+        refetchData();
         router.push('/dashboard');
-        router.refresh();
       } catch (error: any) {
         toast({
           variant: "destructive",

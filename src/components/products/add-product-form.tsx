@@ -29,6 +29,7 @@ import { compressImage } from '@/lib/image-compressor';
 import { PRODUCT_CATEGORIES } from '@/lib/constants';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
+import { useData } from '@/context/data-context';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -60,6 +61,7 @@ export default function AddProductForm({ categories }: AddProductFormProps) {
   const { toast } = useToast();
   const router = useRouter();
   const { user } = useAuth();
+  const { refetchData } = useData();
   const [preview, setPreview] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -153,10 +155,10 @@ export default function AddProductForm({ categories }: AddProductFormProps) {
           title: 'Waste Stream Listed!',
           description: `Your ${values.name} stream is now on the marketplace.`,
         });
+        refetchData();
         form.reset();
         setPreview(null);
         router.push('/dashboard');
-        router.refresh();
       } catch (error: any) {
         toast({
           variant: "destructive",

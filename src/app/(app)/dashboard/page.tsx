@@ -1,8 +1,5 @@
 'use client';
 
-import { useState, useEffect, useTransition } from 'react';
-import { getProducts, updateProductStatus } from "@/lib/data";
-import type { Product } from '@/lib/types';
 import { PageTransitionWrapper } from "@/components/page-transition-wrapper";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -14,7 +11,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-
+import { useData } from "@/context/data-context";
+import { updateProductStatus } from "@/lib/data";
 
 const StatCard = ({ icon, title, value, isLoading }: { icon: React.ReactNode, title: string, value: number, isLoading: boolean }) => {
     if (isLoading) {
@@ -44,35 +42,13 @@ const StatCard = ({ icon, title, value, isLoading }: { icon: React.ReactNode, ti
     )
 };
 
-
 export default function DashboardPage() {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isPending, startTransition] = useTransition();
+  const { userProducts: products, loading: isPending, refetchData } = useData();
 
-  const fetchProducts = () => {
-    if (user?.id) {
-      startTransition(async () => {
-        const userProducts = await getProducts({ sellerId: user.id });
-        setProducts(userProducts);
-      });
-    }
-  }
-
-  useEffect(() => {
-    fetchProducts();
-  }, [user]);
-
-  const handleProductDelete = (productId: string) => {
-    setProducts(prev => prev.filter(p => p.id !== productId));
-  }
-  
   const handleStatusChange = async (productId: string, isSold: boolean) => {
-    const originalProducts = [...products];
     const newStatus = isSold ? 'sold' : 'available';
-
-    setProducts(prev => prev.map(p => p.id === productId ? {...p, isSold} : p));
     
     try {
       await updateProductStatus(productId, newStatus);
@@ -80,8 +56,8 @@ export default function DashboardPage() {
         title: "Status Updated",
         description: `Stream marked as ${newStatus}.`,
       });
+      refetchData();
     } catch (error: any) {
-        setProducts(originalProducts);
         toast({
             variant: "destructive",
             title: "Update Failed",
@@ -186,7 +162,7 @@ export default function DashboardPage() {
             ) : (
                 <SellerDashboardClient 
                     products={products}
-                    onProductDelete={handleProductDelete}
+                    onProductDelete={refetchData}
                     onStatusChange={handleStatusChange}
                 />
             )}

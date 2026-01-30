@@ -1,33 +1,22 @@
 'use client';
 
-import { useState, useEffect, useTransition } from 'react';
+import { useState, useEffect } from 'react';
 import { PageTransitionWrapper } from '@/components/page-transition-wrapper';
 import ProductCard from '@/components/products/product-card';
-import { getProducts } from '@/lib/data';
 import type { Product } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PRODUCT_CATEGORIES } from '@/lib/constants';
-import { Search, Loader2 } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { cn } from '@/lib/utils';
 import { ScrollAnimation } from '@/components/scroll-animation';
+import { useData } from '@/context/data-context';
 
 export default function AllProductsPage() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const { products, loading: isPending } = useData();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('all');
-  const [isPending, startTransition] = useTransition();
-
-  useEffect(() => {
-    startTransition(async () => {
-      const allProducts = await getProducts();
-      // Sort by creation date, newest first
-      const sortedProducts = allProducts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-      setProducts(sortedProducts);
-    });
-  }, []);
 
   useEffect(() => {
     let tempProducts = [...products];
