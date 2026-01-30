@@ -333,13 +333,13 @@ export async function addCommunityRating(rating: number, userId: string) {
     }
 }
 
-export async function getMonthlyWasteDiverted(): Promise<{ month: string; diverted: number }[]> {
+export async function getMonthlyWasteDiverted(): Promise<{ month: string; diverted: number; profit: number }[]> {
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
     const { data, error } = await supabase
         .from('products')
-        .select('created_at')
+        .select('created_at, price')
         .eq('status', 'sold')
         .gte('created_at', sixMonthsAgo.toISOString());
 
@@ -351,19 +351,20 @@ export async function getMonthlyWasteDiverted(): Promise<{ month: string; divert
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     
     // Initialize data for the last 6 months
-    const monthlyData: { [key: string]: { month: string; diverted: number } } = {};
+    const monthlyData: { [key: string]: { month: string; diverted: number; profit: number } } = {};
     for (let i = 5; i >= 0; i--) {
         const d = new Date();
         d.setMonth(d.getMonth() - i);
         const monthName = monthNames[d.getMonth()];
-        monthlyData[monthName] = { month: monthName, diverted: 0 };
+        monthlyData[monthName] = { month: monthName, diverted: 0, profit: 0 };
     }
 
     data.forEach(item => {
         const date = new Date(item.created_at);
         const monthName = monthNames[date.getMonth()];
         if (monthlyData[monthName]) {
-            monthlyData[monthName].diverted += 1; // Each sold product is 1 transaction
+            monthlyData[monthName].diverted += 1;
+            monthlyData[monthName].profit += item.price;
         }
     });
     
