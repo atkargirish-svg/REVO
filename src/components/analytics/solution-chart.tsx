@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartConfig, ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { getMonthlyWasteDiverted } from '@/lib/data';
@@ -12,11 +12,11 @@ import { ArrowUpCircle } from 'lucide-react';
 const chartConfig = {
   profit: {
     label: 'Profit Generated (₹)',
-    color: 'hsl(var(--chart-1))',
+    color: 'hsl(142.1 76.2% 36.3%)', // Green
   },
   pollutionSaved: {
-    label: 'Pollution Avoided',
-    color: 'hsl(var(--primary))',
+    label: 'Pollution Saved',
+    color: 'hsl(var(--destructive))', // Red
   },
 } satisfies ChartConfig;
 
@@ -85,10 +85,10 @@ export function SolutionChart() {
                 <YAxis
                 yAxisId="left"
                 orientation="left"
-                stroke="hsl(var(--primary))"
+                stroke="var(--color-pollutionSaved)"
                 axisLine={false}
                 tickLine={false}
-                label={{ value: 'Pollution Avoided', angle: -90, position: 'insideLeft', fill: 'hsl(var(--primary))', offset: 10 }}
+                label={{ value: 'Pollution Saved', angle: -90, position: 'insideLeft', fill: 'var(--color-pollutionSaved)', offset: 10 }}
                 />
                 <YAxis
                 yAxisId="right"
@@ -96,7 +96,8 @@ export function SolutionChart() {
                 tickFormatter={(value) => `₹${Number(value) / 1000}k`}
                 axisLine={false}
                 tickLine={false}
-                label={{ value: 'Profit Generated', angle: 90, position: 'insideRight', offset: 10 }}
+                stroke="var(--color-profit)"
+                label={{ value: 'Profit Generated', angle: 90, position: 'insideRight', fill: 'var(--color-profit)', offset: 10 }}
                 />
                 <Tooltip
                 cursor={false}
@@ -112,7 +113,7 @@ export function SolutionChart() {
                 />
                 <Legend />
                 <Line type="monotone" yAxisId="left" dataKey="pollutionSaved" stroke="var(--color-pollutionSaved)" strokeWidth={3} dot={false} />
-                <Bar yAxisId="right" dataKey="profit" fill="var(--color-profit)" radius={4} maxBarSize={40}/>
+                <Line yAxisId="right" type="monotone" dataKey="profit" stroke="var(--color-profit)" strokeWidth={3} dot={false}/>
           </ComposedChart>
         </ChartContainer>
       </CardContent>
