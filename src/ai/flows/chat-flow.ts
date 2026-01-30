@@ -1,44 +1,46 @@
 'use server';
 
-import {ai} from '@/ai/genkit';
+import Groq from 'groq-sdk';
 import { 
-    ChatInputSchema, 
     type ChatInput, 
-    ChatOutputSchema, 
     type ChatOutput 
 } from './chat-types';
 
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY
+});
+
 // The main flow function
 export async function chat(input: ChatInput): Promise<ChatOutput> {
-  return chatFlow(input);
-}
+  if (!process.env.GROQ_API_KEY) {
+      throw new Error('GROQ_API_KEY is not set in the environment.');
+  }
 
-const chatFlow = ai.defineFlow(
-  {
-    name: 'chatFlow',
-    inputSchema: ChatInputSchema,
-    outputSchema: ChatOutputSchema,
-  },
-  async (input) => {
-    // Construct the prompt history from the input
-    const history = input.history.map((msg) => ({
-        role: msg.role,
-        content: [{text: msg.content}],
-    }));
+  try {
+    const messages = [
+        ...input.history.map((msg) => ({
+            role: msg.role === 'model' ? 'assistant' : 'user',
+            content: msg.content,
+        })),
+        {
+            role: 'user' as const,
+            content: input.message,
+        },
+    ];
 
-    const llmResponse = await ai.generate({
-      model: 'googleai/gemini-pro-vision',
-      history: history,
-      prompt: input.message,
-      config: {
-          temperature: 0.7,
-      }
+    const llmResponse = await groq.chat.completions.create({
+      messages: messages as any,
+      model: 'llama3-8b-8192', // Fast and capable model on Groq
+      temperature: 0.7,
     });
 
-    const text = llmResponse.text;
+    const text = llmResponse.choices[0]?.message?.content || 'Sorry, I could not generate a response.';
     
     return {
       response: text,
     };
+  } catch(e: any) {
+    console.error("Error with Groq API:", e);
+    throw new Error(`Groq API failed: ${e.message || 'An unknown error occurred.'}`);
   }
-);
+}
