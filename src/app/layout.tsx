@@ -23,7 +23,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#0F1626" />
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.png"></link>
+        <link rel="apple-touch-icon" href="/logo/logo.jpg"></link>
       </head>
       <body className="font-body antialiased">
         <ThemeProvider

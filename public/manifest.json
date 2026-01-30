@@ -1,21 +1,23 @@
 {
-  "name": "Suryodaya Bazar",
-  "short_name": "Suryodaya Bazar",
-  "description": "A campus marketplace for students to buy and sell used goods.",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#2563eb",
+  "name": "REVO - Industrial Waste Exchange",
+  "short_name": "REVO",
+  "description": "REVO: Resource Exchange & Value Optimization. AI-Powered Circular Economy Platform.",
   "icons": [
     {
-      "src": "/icons/icon-192x192.png",
+      "src": "/logo/logo.jpg",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/jpeg",
+      "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-512x512.png",
+      "src": "/logo/logo.jpg",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/jpeg",
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F1626",
+  "theme_color": "#0F1626"
 }
