@@ -29,7 +29,7 @@ interface IWindow extends Window {
   webkitSpeechRecognition?: any;
 }
 
-const AUTO_SEND_DELAY = 2000; // 2 seconds
+const AUTO_SEND_DELAY = 1000; // 1 second
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
