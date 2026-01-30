@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 96%;
+    --foreground: 218 50% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 218 50% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 218 50% 10%;
+    --primary: 7 100% 62%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 218 50% 10%;
+    --secondary-foreground: 0 0% 96%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 218 20% 40%;
+    --accent: 38 18% 57%;
+    --accent-foreground: 218 50% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 7 100% 62%;
+    --chart-1: 7 100% 62%;
+    --chart-2: 38 18% 57%;
+    --chart-3: 218 20% 40%;
+    --chart-4: 7 100% 72%;
+    --chart-5: 38 18% 67%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 218 50% 10%;
+    --foreground: 0 0% 96%;
+    --card: 218 40% 15%;
+    --card-foreground: 0 0% 96%;
+    --popover: 218 50% 10%;
+    --popover-foreground: 0 0% 96%;
+    --primary: 7 100% 62%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 38 18% 57%;
+    --secondary-foreground: 218 50% 10%;
+    --muted: 218 30% 20%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 7 100% 62%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 96%;
+    --border: 218 30% 25%;
+    --input: 218 30% 25%;
+    --ring: 7 100% 62%;
+    --chart-1: 7 100% 62%;
+    --chart-2: 38 18% 57%;
+    --chart-3: 0 0% 60%;
+    --chart-4: 7 100% 72%;
+    --chart-5: 38 18% 67%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  .signature {
+    font-family: 'Dancing Script', cursive;
+    color: hsl(var(--primary) / 0.9);
+  }
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #certificate-print-area, #certificate-print-area * {
+    visibility: visible;
+  }
+  #certificate-print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 1in;
+    box-sizing: border-box;
+  }
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+}

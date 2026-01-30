@@ -1,0 +1,52 @@
+{
+  "placeholderImages": [
+    {
+      "id": "product-textbook",
+      "description": "Industrial Plastic Waste",
+      "imageUrl": "https://images.unsplash.com/photo-1759577452309-6c17014434ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxpbmR1c3RyaWFsJTIwcGxhc3RpY3xlbnwwfHx8fDE3Njk0Mzg0MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "industrial plastic"
+    },
+    {
+      "id": "product-laptop",
+      "description": "Bales of scrap metal",
+      "imageUrl": "https://images.unsplash.com/photo-1600368357785-4f8df2ce3899?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzY3JhcCUyMG1ldGFsfGVufDB8fHx8MTc2OTQzODQxMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "scrap metal"
+    },
+    {
+      "id": "product-chair",
+      "description": "Textile sludge",
+      "imageUrl": "https://images.unsplash.com/flagged/photo-1572213426852-0e4ed8f41ff6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx0ZXh0aWxlJTIwd2FzdGV8ZW58MHx8fHwxNzY5NDM4NDEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "textile waste"
+    },
+    {
+      "id": "product-hoodie",
+      "description": "Construction debris",
+      "imageUrl": "https://images.unsplash.com/photo-1758965285803-1cdd3371563b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y29uc3RydWN0aW9uJTIwZGVicmlzfGVufDB8fHx8MTc2OTQzODQxMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "construction debris"
+    },
+    {
+      "id": "product-lamp",
+      "description": "E-waste pile",
+      "imageUrl": "https://images.unsplash.com/photo-1746013426059-f2733b9a2500?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxlLXdhc3RlJTIwZWxlY3Ryb25pY3N8ZW58MHx8fHwxNzY5NDM4NDEzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "e-waste electronics"
+    },
+    {
+      "id": "product-bike",
+      "description": "Chemical drums",
+      "imageUrl": "https://images.unsplash.com/photo-1702480248432-7a87f4d9463e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjaGVtaWNhbCUyMGJhcnJlbHxlbnwwfHx8fDE3Njk0Mzg0MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chemical barrel"
+    },
+    {
+      "id": "product-headphones",
+      "description": "Organic compost",
+      "imageUrl": "https://images.unsplash.com/photo-1760009449712-09befce78964?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8b3JnYW5pYyUyMGNvbXBvc3R8ZW58MHx8fHwxNzY5NDM4NDEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "organic compost"
+    },
+    {
+      "id": "product-backpack",
+      "description": "Used industrial oil",
+      "imageUrl": "https://images.unsplash.com/photo-1633983315965-6137d3bf9cfa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8aW5kdXN0cmlhbCUyMG9pbHxlbnwwfHx8fDE3Njk0Mzg0MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "industrial oil"
+    }
+  ]
+}
