@@ -22,7 +22,7 @@ export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
-  const [isTtsEnabled, setIsTtsEnabled] = useState(false);
+  const [isTtsEnabled, setIsTtsEnabled] = useState(true);
   const [isPending, startTransition] = useTransition();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -95,7 +95,7 @@ export default function ChatWidget() {
             <div>
                 <SheetTitle>AI Assistant</SheetTitle>
                 <SheetDescription>
-                    I am REVO, an AI assistant created by Atharva Atkar.
+                    AI assistant by Atharva Atkar.
                 </SheetDescription>
             </div>
             <TooltipProvider>
@@ -120,7 +120,7 @@ export default function ChatWidget() {
                     <AvatarFallback><Bot /></AvatarFallback>
                 </Avatar>
                 <div className="max-w-[75%] p-3 rounded-lg bg-muted">
-                    <p>Hi! I'm REVO, your AI assistant. I was created by Atharva Atkar from Suryodaya College of Engineering, Nagpur. Ask me anything about the products on this platform!</p>
+                    <p>Hi! I'm REVO, your friendly AI assistant, created by Atharva Atkar from Suryodaya College of Engineering and Technology, Nagpur. How can I help you navigate the marketplace today?</p>
                 </div>
             </div>
             {messages.map((message, index) => (
