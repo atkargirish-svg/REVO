@@ -8,7 +8,6 @@ import { Factory, Recycle, Leaf, Truck } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProblemChart } from '@/components/analytics/problem-chart';
 import { SolutionChart } from '@/components/analytics/solution-chart';
-import Image from 'next/image';
 import { ScrollAnimation } from '@/components/scroll-animation';
 import { useTranslation } from '@/hooks/use-translation';
 
@@ -93,14 +92,15 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative w-full h-[60vh] min-h-[400px] flex items-center justify-center text-center border-b overflow-hidden">
         <div className="absolute inset-0">
-          <Image
-            src="/bg.jpg"
-            alt="Hero background image"
-            fill
-            className="object-cover"
-            priority
-            data-ai-hint="background image"
-          />
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src="/logo/veo.mp4" type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-black/60" />
         </div>
         <div className="relative container px-4">
